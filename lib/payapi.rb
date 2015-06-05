@@ -1,5 +1,6 @@
 require 'payapi/version'
+require 'payapi/authenticate'
 
-module Payapi
+module PayApi
   # Your code goes here...
 end

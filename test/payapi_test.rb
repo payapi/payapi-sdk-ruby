@@ -13,7 +13,7 @@ class TestPayapi < Minitest::Test
     stub_request(:post, endpoint)
     params = {
       site: site,
-      api_key: '123',
+      key: '123',
       password: 'password',
       private_key: 'private_key'
     }
@@ -34,9 +34,10 @@ class TestPayapi < Minitest::Test
     api_key = '123'
     endpoint = "#{site}/auth/login"
     stub_request(:post, endpoint)
+
     params = {
       site: site,
-      api_key: api_key,
+      key: api_key,
       password: password,
       private_key: private_key
     }

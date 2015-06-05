@@ -6,7 +6,7 @@ module PayApi
     attr_reader :attributes, :private_key, :site
 
     # attributes = {
-    #   api_key: <your api key>,
+    #   key: <your api key>,
     #   site: <site of authentication>,
     #   private_key: <your private key>,
     #   password: <your api key's password>
@@ -22,14 +22,14 @@ module PayApi
 
     def call
       resource = RestClient::Resource.new(@site, { headers: {content_type: :json, accept: :json }})
-      api_key = attributes.fetch(:api_key)
+      api_key = attributes.fetch(:key)
       data = {user: {'key': api_key, 'password': attributes.fetch(:password)}}
       token = JWT.encode data, @private_key, 'HS512'
-        params = {
-          api_key: api_key,
-          token: token
-        }.to_json
-        response = resource['/auth/login'].post params
+      params = {
+        key: api_key,
+        token: token
+      }.to_json
+      response = resource['/auth/login'].post params
     end
   end
 end
