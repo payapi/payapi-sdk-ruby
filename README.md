@@ -2,8 +2,8 @@
 
 A ruby client library for http://payapi.io/. Runtime depends on
 
-https://github.com/rest-client/rest-client
-https://github.com/progrium/ruby-jwt
+* https://github.com/rest-client/rest-client
+* https://github.com/progrium/ruby-jwt
 
 Check gemspec for development dependencies.
 
