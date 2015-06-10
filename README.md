@@ -1,4 +1,4 @@
-# Payapi
+# PayApi
 
 A ruby client library for http://payapi.io/. Runtime depends on
 
@@ -31,6 +31,23 @@ Create an account at http://input.payapi.io/ or its staging site, which can be u
 * ApiKey secret
 * ApiKey password
 * Site (input.payapi.io or its staging site)
+
+We recommend using something like [dotenv](https://github.com/bkeepers/dotenv/ "dotenv") in combination with [settingslogic](https://github.com/binarylogic/settingslogic/ "settingslogic") to inject the values into your application and/or stage.
+
+In order to use the non-free endpoints you will need a token. You can request the token through authentication.
+
+```ruby
+require 'payapi'
+params = {
+  site: Settings.payapi.site,
+  key: Settings.payapi.api_key,
+  password: Settings.payapi.password,
+  private_key: Settings.payapi.private_key
+}
+token = PayApi::Authenticate.new(params).call
+```
+
+Store the token in your application and implement a re-authorization process based on the expiration time of the token or error handling.
 
 ## Development
 
