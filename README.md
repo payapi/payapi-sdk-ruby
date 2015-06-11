@@ -7,12 +7,39 @@ A ruby client library for http://payapi.io/. Runtime depends on
 
 Check gemspec for development dependencies.
 
+## Quick PoC
+
+Gemfile
+```ruby
+source 'https://rubygems.org'
+gem 'payapi', git: 'https://github.com/payapi/ruby'
+gem 'pry'
+```
+
+Execute
+```ruby
+bundle
+bundle exec pry
+```
+
+Authenticate
+```ruby
+require 'payapi'
+params = {
+  site: 'input.payapi.io',
+  key: [YOUR API KEY],
+  password: [YOUR API KEY'S PASSWORD],
+  secret: [YOUR API KEY'S SECRET]
+}
+token = PayApi::Authenticate.new(params).call
+```
+
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'payapi'
+gem 'payapi', git: 'https://github.com/payapi/ruby'
 ```
 
 And then execute:
