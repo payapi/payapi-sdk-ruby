@@ -11,7 +11,7 @@ class TestPayApiAuthentication < Minitest::Test
       site: site,
       key: '123',
       password: 'password',
-      private_key: 'private_key'
+      secret: 'secret'
     }
     PayApi::Authenticate.new(params).call
     assert_requested :post, endpoint,
@@ -23,9 +23,9 @@ class TestPayApiAuthentication < Minitest::Test
       times: 1
   end
 
-  def test_password_is_encrypted_using_private_key
+  def test_password_is_encrypted_using_secret
     site = 'input.payapi.io'
-    private_key = 'private_key'
+    secret = 'secret'
     password = 'password'
     api_key = '123'
     endpoint = "#{site}/auth/login"
@@ -35,12 +35,12 @@ class TestPayApiAuthentication < Minitest::Test
       site: site,
       key: api_key,
       password: password,
-      private_key: private_key
+      secret: secret
     }
 
     PayApi::Authenticate.new(params).call
     data = {apiKey: {key: api_key, 'password': password}}
-    token = JWT.encode data, private_key, 'HS512'
+    token = JWT.encode data, secret, 'HS512'
 
     assert_requested :post, endpoint,
       body: {

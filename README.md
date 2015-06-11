@@ -42,7 +42,7 @@ params = {
   site: Settings.payapi.site,
   key: Settings.payapi.api_key,
   password: Settings.payapi.password,
-  private_key: Settings.payapi.private_key
+  secret: Settings.payapi.secret
 }
 token = PayApi::Authenticate.new(params).call
 ```
