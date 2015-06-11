@@ -27,9 +27,9 @@ Authenticate
 require 'payapi'
 params = {
   site: 'input.payapi.io',
-  key: [YOUR API KEY],
-  password: [YOUR API KEY'S PASSWORD],
-  secret: [YOUR API KEY'S SECRET]
+  key: '[YOUR API KEY]',
+  password: '[YOUR API KEY'S PASSWORD]',
+  secret: '[YOUR API KEY'S SECRET]'
 }
 token = PayApi::Authenticate.new(params).call
 ```
