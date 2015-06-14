@@ -4,18 +4,18 @@ require 'payapi/payment'
 require 'jwt'
 
 class TestPayApiPayment < Minitest::Test
-  attr_reader :token, :site, :secret, :endpoint
+  attr_reader :token, :site, :secret, :endpoint, :params, :options
 
-  def test_required_parameters
+  def setup
     @site = 'input.payapi.io'
     @endpoint = "#{@site}/payments"
     @secret = 'super secret'
-    stub_request(:post, @endpoint)
+    @token = 'dummy token'
     # params are mandatory
-    params = {
+    @params = {
       token: token,
       secret: secret,
-      site: @site,
+      site: site,
       cc_ccv2: '1234',
       cc_number: '1234123412341234',
       cc_holder_name: 'John Smith',
@@ -26,12 +26,16 @@ class TestPayApiPayment < Minitest::Test
     }
     # options are optional, chiefly adding to fraud check
     # coverage and score
-    options = {
+    @options = {
     }
+  end
+
+  def test_required_parameters
+    stub_request(:post, @endpoint)
     data = {params: params, options: options}
     data = JWT.encode data, secret, 'HS512'
     PayApi::Payment.new(params, options).call
-    assert_requested :post, @endpoint,
+    assert_requested :post, endpoint,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -43,33 +47,6 @@ class TestPayApiPayment < Minitest::Test
       },
       times: 1
   end
-
-  #def test_password_is_encrypted_using_secret
-  #  site = 'input.payapi.io'
-  #  secret = 'secret'
-  #  password = 'password'
-  #  api_key = '123'
-  #  endpoint = "#{site}/auth/login"
-  #  stub_request(:post, endpoint)
-
-  #  params = {
-  #    site: site,
-  #    key: api_key,
-  #    password: password,
-  #    secret: secret
-  #  }
-
-  #  PayApi::Authenticate.new(params).call
-  #  data = {apiKey: {key: api_key, 'password': password}}
-  #  token = JWT.encode data, secret, 'HS512'
-
-  #  assert_requested :post, endpoint,
-  #    body: {
-  #      'key': '123',
-  #      'token': token,
-  #    },
-  #    times: 1
-  #end
 
 end
 
