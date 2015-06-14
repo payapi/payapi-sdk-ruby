@@ -32,9 +32,12 @@ class TestPayApiPayment < Minitest::Test
 
   def test_required_parameters
     stub_request(:post, @endpoint)
+    PayApi::Payment.new(params, options).call
+    params.delete(:site)
+    params.delete(:secret)
+    params.delete(:token)
     data = {params: params, options: options}
     data = JWT.encode data, secret, 'HS512'
-    PayApi::Payment.new(params, options).call
     assert_requested :post, endpoint,
       headers: {
         'Content-Type': 'application/json',

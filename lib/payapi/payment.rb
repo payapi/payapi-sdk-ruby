@@ -3,11 +3,12 @@ require 'jwt'
 module PayApi
 
   class Payment
-    attr_reader :params, :options
+    attr_reader :params, :options, :site, :secret, :token
 
     #params = {
     #  token: <authentication token>,
     #  secret: <your api key secret>,
+    #  site: <payapi site you are connecting to>,
     #  cc_ccv2: <credit card ccv2>,
     #  cc_number: <credit card number>,
     #  cc_holder_name: <name of credit card owner>,
@@ -22,20 +23,21 @@ module PayApi
     def initialize(params, options)
       @params = params
       @options = options
+      @site = params.fetch(:site)
+      @secret = params.fetch(:secret)
+      @token = params.fetch(:token)
+      @params.delete(:site)
+      @params.delete(:secret)
+      @params.delete(:token)
       RestClient.add_before_execution_proc do |req, params|
         req['alg'] = 'HS512'
       end
     end
 
     def call
-      site = params.fetch(:site)
       resource = RestClient::Resource.new(site, { headers: {content_type: :json, accept: :json }})
       data = {params: params, options: options}
-      data = JWT.encode data, @params.fetch(:secret), 'HS512'
-      token = @params.fetch(:token)
-      @params.delete(:site)
-      @params.delete(:secret)
-      @params.delete(:token)
+      data = JWT.encode data, secret, 'HS512'
       params = {
         token: token,
         data: data
