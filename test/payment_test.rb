@@ -8,7 +8,7 @@ class TestPayApiPayment < Minitest::Test
 
   def setup
     @site = 'input.payapi.io'
-    @endpoint = "#{@site}/payments"
+    @endpoint = "#{@site}/api/payments"
     @secret = 'super secret'
     @token = 'dummy token'
     # params are mandatory

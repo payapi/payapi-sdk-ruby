@@ -42,7 +42,7 @@ module PayApi
         token: token,
         data: data
       }.to_json
-      response = resource['/payments'].post params
+      response = resource['/api/payments'].post params
     end
   end
 end
