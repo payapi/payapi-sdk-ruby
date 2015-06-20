@@ -13,15 +13,15 @@ module PayApi
     # }
     def initialize(params)
       @params = params
-      @site = params.fetch(:site)
-      @secret = params.fetch(:secret)
+      @site = @params.fetch(:site)
+      @secret = @params.fetch(:secret)
       RestClient.add_before_execution_proc do |req, params|
         req['alg'] = 'HS512'
       end
     end
 
     def call
-      resource = RestClient::Resource.new(@site, { headers: {content_type: :json, accept: :json }})
+      resource = RestClient::Resource.new(@site, {read_timeout: 10, open_timeout: 10,  headers: {content_type: :json, accept: :json }})
       api_key = params.fetch(:key)
       data = {apiKey: {'key': api_key, 'password': params.fetch(:password)}}
       token = JWT.encode data, @secret, 'HS512'
