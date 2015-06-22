@@ -3,12 +3,10 @@ require 'jwt'
 module PayApi
 
   class Payment
-    attr_reader :params, :options, :site, :secret, :token
+    attr_reader :params, :options, :data
 
     #params = {
-    #  token: <authentication token>,
-    #  secret: <your api key secret>,
-    #  site: <payapi site you are connecting to>,
+    #  reference_number: <reference number of order for which this is a payment for>,
     #  cc_ccv2: <credit card ccv2>,
     #  cc_number: <credit card number>,
     #  cc_holder_name: <name of credit card owner>,
@@ -16,33 +14,47 @@ module PayApi
     #  success_callback: <callback url for a successful payment>,
     #  failure_callback: <callback url for a failed payment>,
     #  cancel_callback: <callback url for a cancelled payment>
+    #  OR
+    #  data: <jwt encoded data containing above parameters>
     #}
     #options = {
     #  ip_address: <ip address of client who entered credit card details>
     #}
-    def initialize(params, options)
+    def initialize(params, options = {})
       @params = params
+      @data = params[:data]
       @options = options
-      @site = params.fetch(:site)
-      @secret = params.fetch(:secret)
-      @token = params.fetch(:token)
-      @params.delete(:site)
-      @params.delete(:secret)
-      @params.delete(:token)
       RestClient.add_before_execution_proc do |req, params|
         req['alg'] = 'HS512'
       end
     end
 
-    def call
-      resource = RestClient::Resource.new(site, { headers: {content_type: :json, accept: :json }})
-      data = {params: params, options: options}
-      data = JWT.encode data, secret, 'HS512'
-      params = {
-        token: token,
+    def payload
+      if @data.nil?
+        data = {params: params, options: options}
+        binding.pry
+        data = JWT.encode data, CONFIG[:secret], 'HS512'
+      else
+        data = @data
+      end
+      JSON.parse(Authenticate.new.call).merge!({
         data: data
-      }.to_json
-      response = resource['/api/payments'].post params
+      }).to_json
+    end
+
+    def call
+      resource = RestClient::Resource.new(
+        CONFIG[:site],
+        {
+          read_timeout: CONFIG[:read_timeout],
+          open_timeout: CONFIG[:open_timeout],
+          headers: {content_type: :json, accept: :json }
+        })
+      puts "******************** payload"
+      puts payload
+      puts "******************** /payload"
+      response = resource['/api/payments'].post payload
+      puts response
     end
   end
 end
