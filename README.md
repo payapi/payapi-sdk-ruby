@@ -22,8 +22,9 @@ bundle
 bundle exec pry
 ```
 
-Authenticate
+Payment
 ```ruby
+# Configure in an initializer.
 require 'payapi'
 params = {
   site: 'input.payapi.io',
@@ -31,7 +32,20 @@ params = {
   password: '[YOUR API KEY'S PASSWORD]',
   secret: '[YOUR API KEY'S SECRET]'
 }
-token = PayApi::Authenticate.new(params).call
+PayApi.configure params
+
+# Process a payment
+payment_params = {
+  reference_number: <reference number of order for which this is a payment for>,
+  cc_ccv2: <credit card ccv2>,
+  cc_number: <credit card number>,
+  cc_holder_name: <name of credit card owner>,
+  cc_expires: <expiration date of credit card in mm/yy format>,
+  success_callback: <callback url for a successful payment>,
+  failure_callback: <callback url for a failed payment>,
+  cancel_callback: <callback url for a cancelled payment>
+}
+PayApi::Payment.new(payment_params).call
 ```
 
 ## Installation
