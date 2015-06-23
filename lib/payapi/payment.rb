@@ -32,7 +32,6 @@ module PayApi
     def payload
       if @data.nil?
         data = {params: params, options: options}
-        binding.pry
         data = JWT.encode data, CONFIG[:secret], 'HS512'
       else
         data = @data
