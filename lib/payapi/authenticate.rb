@@ -18,6 +18,8 @@ module PayApi
         key: api_key,
         token: token
       }.to_json
+      puts token
+      token
     end
 
     def call(given_payload = nil)

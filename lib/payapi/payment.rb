@@ -31,6 +31,9 @@ module PayApi
 
     def payload
       if @data.nil?
+        puts "********************************************"
+        puts "PARAMS: #{params}"
+        puts "********************************************"
         data = {params: params, options: options}
         data = JWT.encode data, CONFIG[:secret], 'HS512'
       else
@@ -53,7 +56,9 @@ module PayApi
       puts payload
       puts "******************** /payload"
       response = resource['/api/payments'].post payload
+      puts "******************** response"
       puts response
+      puts "******************** /response"
     end
   end
 end
