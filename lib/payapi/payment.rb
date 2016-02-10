@@ -55,7 +55,7 @@ module PayApi
       puts "******************** payload"
       puts payload
       puts "******************** /payload"
-      response = resource['/api/payments'].post payload
+      response = resource['/v1/api/authorized/payments'].post payload
       puts "******************** response"
       puts response
       puts "******************** /response"

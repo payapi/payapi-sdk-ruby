@@ -25,7 +25,7 @@ module PayApi
       puts CONFIG.to_s
       if @token.nil? || @token[:expires] >= Time.now
         resource = RestClient::Resource.new(CONFIG[:site], {read_timeout: CONFIG[:read_timeout], open_timeout: CONFIG[:open_timeout], headers: {content_type: :json, accept: :json }})
-        @token = resource['/auth/login'].post given_payload || payload
+        @token = resource['/v1/api/auth/login'].post given_payload || payload
       end
       @token
     end
