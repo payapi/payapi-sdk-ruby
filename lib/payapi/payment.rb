@@ -84,6 +84,7 @@ module PayApi
     end
 
     def payload
+      puts 'data:' + data
       payload = {
         authenticationToken: Authenticate.new.call,
         paymentToken: JWT.encode(data, CONFIG[:secret], 'HS512')
@@ -98,13 +99,7 @@ module PayApi
           open_timeout: CONFIG[:open_timeout],
           headers: {content_type: :json, accept: :json }
         })
-      puts "******************** payload"
-      puts payload
-      puts "******************** /payload"
       response = resource['/v1/api/authorized/payments'].post payload
-      puts "******************** response"
-      puts response
-      puts "******************** /response"
     end
   end
 end
