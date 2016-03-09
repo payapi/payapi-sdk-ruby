@@ -85,6 +85,9 @@ module PayApi
 
     def payload
       if @data.nil?
+        puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+        puts params
+        puts "/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
         data = {params: params}
         data = JWT.encode data, CONFIG[:secret], 'HS512'
       else
