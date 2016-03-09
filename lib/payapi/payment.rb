@@ -88,7 +88,7 @@ module PayApi
         puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
         puts params
         puts "/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-        data = {params: params}
+        data = {paymentToken: params}
         data = JWT.encode data, CONFIG[:secret], 'HS512'
       else
         data = @data
