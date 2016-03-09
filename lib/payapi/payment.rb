@@ -91,7 +91,7 @@ module PayApi
         data = @data
       end
       JSON.parse(Authenticate.new.call).merge!({
-        paymentToken: data
+        paymentToken: data.token
       }).to_json
     end
 
