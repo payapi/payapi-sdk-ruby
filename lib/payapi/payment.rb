@@ -76,18 +76,24 @@ module PayApi
     #};
 
     def initialize(params)
-      @params = params
+      if params.class == Hash
+        @params = params
+      else
+        @payload = params
+      end
       RestClient.add_before_execution_proc do |req, params|
         req['alg'] = 'HS512'
       end
     end
 
     def payload
-      puts '@params:' + @params
-      payload = {
-        authenticationToken: Authenticate.new.call,
-        paymentToken: JWT.encode(@params, CONFIG[:secret], 'HS512')
-      }.to_json
+      if @payload.nil?
+        @payload = {
+          authenticationToken: Authenticate.new.call,
+          paymentToken: JWT.encode(@params, CONFIG[:secret], 'HS512')
+        }.to_json
+      end
+      @payload
     end
 
     def call
@@ -98,7 +104,7 @@ module PayApi
           open_timeout: CONFIG[:open_timeout],
           headers: {content_type: :json, accept: :json }
         })
-      response = resource['/v1/api/authorized/payments'].post payload
+      resource['/v1/api/authorized/payments'].post payload
     end
   end
 end
