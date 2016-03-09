@@ -104,7 +104,6 @@ module PayApi
           open_timeout: CONFIG[:open_timeout],
           headers: {content_type: :json, accept: :json }
         })
-      puts "posting payload #{payload}"
       resource['/v1/api/authorized/payments'].post payload
     end
   end

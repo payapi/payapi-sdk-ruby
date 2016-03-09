@@ -14,7 +14,6 @@ module PayApi
       password = CONFIG[:password]
       data = {apiKey: {'key': api_key, 'password': password}}
       token = JWT.encode data, CONFIG[:secret], 'HS512'
-      puts token
       {
         key: api_key,
         token: token
