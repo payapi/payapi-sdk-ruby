@@ -84,20 +84,10 @@ module PayApi
     end
 
     def payload
-      if @data.nil?
-        puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-        puts params
-        puts "/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-        data = {paymentToken: params}
-        data = JWT.encode data, CONFIG[:secret], 'HS512'
-      else
-        data = @data
-      end
-      authentication_token = Authenticate.new.call
-      puts "authentication_token:" + authentication_token
-      JSON.parse({authenticationToken: authentication_token}).merge!({
-        paymentToken: data
-      }).to_json
+      payload = {
+        authenticationToken: Authenticate.new.call,
+        paymentToken: JWT.encode data, CONFIG[:secret], 'HS512'
+      }.to_json
     end
 
     def call
