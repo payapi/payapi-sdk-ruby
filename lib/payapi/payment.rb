@@ -93,6 +93,7 @@ module PayApi
       else
         data = @data
       end
+      puts "Authenticate.new.call:" + Authenticate.new.call
       JSON.parse(Authenticate.new.call).merge!({
         paymentToken: data
       }).to_json
