@@ -3,27 +3,81 @@ require 'jwt'
 module PayApi
 
   class Payment
-    attr_reader :params, :options, :data
-
+    attr_reader :params, :data
     #params = {
-    #  reference_number: <reference number of order for which this is a payment for>,
-    #  cc_ccv2: <credit card ccv2>,
-    #  cc_number: <credit card number>,
-    #  cc_holder_name: <name of credit card owner>,
-    #  cc_expires: <expiration date of credit card in mm/yy format>,
-    #  success_callback: <callback url for a successful payment>,
-    #  failure_callback: <callback url for a failed payment>,
-    #  cancel_callback: <callback url for a cancelled payment>
-    #  OR
-    #  data: <jwt encoded data containing above parameters>
-    #}
-    #options = {
-    #  ip_address: <ip address of client who entered credit card details>
-    #}
-    def initialize(params, options = {})
+    #  "payment": {
+    #    "cardHolderEmail": "cardholder@example.com",
+    #    "cardHolderName": "John Smith",
+    #    "paymentMethod": "mastercard",
+    #    "creditCardNumber": "4242 4242 4242 4242",
+    #    "ccv": "1234",
+    #    "expiresMonth": "2",
+    #    "expiresYear": "3016",
+    #    "locale": "en-US",
+    #    "ip": "::ffff:127.0.0.1"
+    #  },
+    #  "consumer": {
+    #    "name": "John Smith",
+    #    "co": "",
+    #    "streetAddress": "Delivery street 123",
+    #    "streetAddress2": "",
+    #    "postalCode": "90210",
+    #    "city": "New York",
+    #    "stateOrProvince": "",
+    #    "country": "USA"
+    #  },
+    #  "order": {
+    #    "sumInCentsIncVat": 322,
+    #    "sumInCentsExcVat": 300,
+    #    "vatInCents": 22,
+    #    "currency": "EUR",
+    #    "referenceId": "ref123",
+    #    "sumIncludingVat": "€3.22",
+    #    "sumExcludingVat": "€3.00",
+    #    "vat": "€0.22"
+    #  },
+    #  "products": [
+    #    {
+    #      "id": "bbc123456",
+    #      "quantity": 1,
+    #      "title": "Black bling cap",
+    #      "description": "Flashy fine cap",
+    #      "imageUrl": "https://example.com/black_bling_cap.png",
+    #      "category": "Caps and hats",
+    #      "priceInCentsIncVat": 122,
+    #      "priceInCentsExcVat": 100,
+    #      "vatInCents": 22,
+    #      "vatPercentage": "22%",
+    #      "priceIncludingVat": "€1.22",
+    #      "priceExcludingVat": "€1.00",
+    #      "vat": "€0.22"
+    #    },
+    #    {
+    #      "id": "pbc123456",
+    #      "quantity": 1,
+    #      "title": "Pink bling cap",
+    #      "description": "Flashy fine cap",
+    #      "imageUrl": "https://example.com/pink_bling_cap.png",
+    #      "category": "Caps and hats",
+    #      "priceInCentsIncVat": 222,
+    #      "priceInCentsExcVat": 200,
+    #      "vatInCents": 22,
+    #      "vatPercentage": "22%",
+    #      "priceIncludingVat": "€2.22",
+    #      "priceExcludingVat": "€2.00",
+    #      "vat": "€0.22"
+    #    }
+    #  ],
+    #  "callbacks": {
+    #    "success": "https://merchantserver.xyz/payments/success",
+    #    "failed": "https://merchantserver.xyz/payments/failed",
+    #    "chargeback": "https://merchantserver.xyz/payments/chargeback"
+    #  }
+    #};
+
+    def initialize(params)
       @params = params
       @data = params[:data]
-      @options = options
       RestClient.add_before_execution_proc do |req, params|
         req['alg'] = 'HS512'
       end
@@ -31,10 +85,7 @@ module PayApi
 
     def payload
       if @data.nil?
-        puts "********************************************"
-        puts "PARAMS: #{params}"
-        puts "********************************************"
-        data = {params: params, options: options}
+        data = {params: params}
         data = JWT.encode data, CONFIG[:secret], 'HS512'
       else
         data = @data
