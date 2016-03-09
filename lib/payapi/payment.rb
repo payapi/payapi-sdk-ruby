@@ -84,10 +84,9 @@ module PayApi
     end
 
     def payload
-      puts 'data:' + data
       payload = {
         authenticationToken: Authenticate.new.call,
-        paymentToken: JWT.encode(data, CONFIG[:secret], 'HS512')
+        paymentToken: JWT.encode(@data, CONFIG[:secret], 'HS512')
       }.to_json
     end
 
