@@ -77,17 +77,16 @@ module PayApi
 
     def initialize(params)
       @params = params
-      @data = params[:data]
       RestClient.add_before_execution_proc do |req, params|
         req['alg'] = 'HS512'
       end
     end
 
     def payload
-      puts '@data:' + @data
+      puts '@params:' + @params
       payload = {
         authenticationToken: Authenticate.new.call,
-        paymentToken: JWT.encode(@data, CONFIG[:secret], 'HS512')
+        paymentToken: JWT.encode(@params, CONFIG[:secret], 'HS512')
       }.to_json
     end
 
