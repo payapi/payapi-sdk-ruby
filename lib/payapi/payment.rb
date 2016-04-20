@@ -90,7 +90,7 @@ module PayApi
       if @payload.nil?
         @payload = {
           authenticationToken: JSON.parse(Authenticate.new.call),
-          paymentToken: JWT.encode(@params, CONFIG[:secret], 'HS512')
+          paymentToken: JWT.encode(@params, CONFIG[:key], 'HS512')
         }.to_json
       end
       @payload
