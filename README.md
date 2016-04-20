@@ -9,7 +9,7 @@ Check gemspec for development dependencies.
 
 ## IMPORTANT!
 
-Our Ruby library is outdated and is not v1 compatible. If you need support for Ruby, please contact us: https://payapi.io/contact/.
+This Ruby client is outdated and is not v1 compatible with our backend. If you need support for Ruby, please contact us: https://payapi.io/contact/.
 
 ## Quick PoC
 
