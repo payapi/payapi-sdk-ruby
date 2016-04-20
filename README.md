@@ -7,6 +7,10 @@ A ruby client library for http://payapi.io/. Runtime depends on
 
 Check gemspec for development dependencies.
 
+## IMPORTANT!
+
+Our Ruby library is outdated and is not v1 compatible. If you need support for Ruby, please contact us: https://payapi.io/contact/.
+
 ## Quick PoC
 
 Gemfile
